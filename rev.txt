@@ -4,6 +4,8 @@ TITLE: Trajectory Range Visibility
 AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
 
 ----------- Overall evaluation -----------
+SCORE: -2 (Strong reject (incorrect or already known))
+----- TEXT:
 In the abstract and introduction, the authors write the following:
 
 -      "The Trajectory Range Visibility problem deals with determining the sub-trajectories on which two entities become visible to each other.
@@ -53,12 +55,15 @@ Hence, the boolean (or time interval) that the authors output, is independent of
 The authors were also made aware of this issue in reviews received after submitting the same paper to previous conferences.
 
 
+
 ----------------------- REVIEW 2 ---------------------
 SUBMISSION: 444
 TITLE: Trajectory Range Visibility
 AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
 
 ----------- Overall evaluation -----------
+SCORE: 0 (Leaning toward rejection (you would prefer not to accept, but you would not argue if other members of the PC would offer strong support))
+----- TEXT:
 This is not a review, but just a continuation of e-mail communication that I had with the authors. In particular, the score associated with this "review" should be ignored.
 
 In that e-mail communication asked the following question:
@@ -84,12 +89,15 @@ Could there be two trajectories Q and R, such that the answer to the trajectory 
 Please answer the above two questions.
 
 
+
 ----------------------- REVIEW 3 ---------------------
 SUBMISSION: 444
 TITLE: Trajectory Range Visibility
 AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
 
 ----------- Overall evaluation -----------
+SCORE: -2 (Strong reject (incorrect or already known))
+----- TEXT:
 The submission claims to solve the following problem:
 
 Given a simple n-vertex polygon P,  preprocess it in  O(n) time and space to answer following queries: given two piecewise-linear trajectories s and t inside P, consisting of m vertices total, determine whether there occurs `visibility' between two entities traversing s and t respectively with constant speeds (predefined or not predefined). 
@@ -149,12 +157,15 @@ Lemma 3. What do you mean by error rate? How does this result connected with the
 L 343 What are “participants”?
 
 
+
 ----------------------- REVIEW 4 ---------------------
 SUBMISSION: 444
 TITLE: Trajectory Range Visibility
 AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
 
 ----------- Overall evaluation -----------
+SCORE: -1 (Reject (weaker than ICALP papers, to accept this paper you would like to see strong counter-arguments))
+----- TEXT:
 To my understanding, the authors aim to solve the problem of reporting visibility intervals between two moving entities in a simple polygon, so the intervals of time when the moving entities see each other; visibility is blocked by the edges of the polygon. More specifically, they consider the following problems:
 1. The input consists of a simple polygon P and two line segments inside P, so that two entities q and r move along the two segments with given constant speeds. Find all the time intervals when q and r can see each other, that is, when a line segment connecting their current locations lies inside P. The coordinates in this problem are integers.
 2. Same as 1, but with arbitrary coordinates and polylines rather than line segments; and aiming to find a mapping between speeds and time intervals, rather than considering speeds as part of the input.
