@@ -1,0 +1,200 @@
+----------------------- REVIEW 1 ---------------------
+SUBMISSION: 444
+TITLE: Trajectory Range Visibility
+AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
+
+----------- Overall evaluation -----------
+In the abstract and introduction, the authors write the following:
+
+-      "The Trajectory Range Visibility problem deals with determining the sub-trajectories on which two entities become visible to each other.
+A more straightforward version of this problem is a decision version, specifying whether the entities can see one another, considering given constant velocities and assuming the trajectories are line segments.
+This version was studied by P. Eades et al. in 2020. However, the approach presented in this paper supports queries with constant velocities for non-constant complexity trajectories."
+-        "In this paper, we obtain the results in Table 1, and extend the work of P. Eades et al. [18] by considering the following crucial elements in the problem we solve:
+(1) Extending the problem from merely its decision version ...
+(2) Considering the trajectories with not necessarily constant complexity...
+(3) The velocity of the entities are not necessarily given ... "
+-        "In Section 2, we formally define the general variant of the Trajectory Visibility problem that first appeared in [18]"
+-         "We extended the previous works by solving the general version of Trajectory Visibility on a simple polygon and supporting non-constant complexity trajectories."
+
+When reading these sentences, the reader concludes the following:
+- the authors study the same problem as in [18],
+- the authors generalise the problem of [18], and 
+- when inspecting the running times, the authors then improve the query time from [18] for segment trajectories from O(n^{3/4 + e}) to O(log n)
+
+However, I believe this to be untrue. Trajectory visibility has a straightforward and intuitive definition, as presented in [9, 11, 18]:
+Given are two entities q, r that each traverse a trajectory Q and R, at some given velocity. Denote by Q[t] and R[t] their locations at time t. 
+`Is there a time t, such that the points Q[t] and R[t] are visible?'
+
+The data structure variant then preprocesses a polygonal domain P, such that given Q and R, one can either decide if such a t exists, or report all times t for which this occurs. 
+In [18], the authors subsequently study this problem where Q and R are a line segment, and the velocity is part of the query.
+Hence, given Q and R, they can decide if there is a time t, such that the points Q[t] and R[t] are visible, in O(n^{3/4 + ε}) time. 
+
+In this paper, at line 170, the authors give a different and not equivalent definition for trajectory visibility:
+
+"Problem 2 (Trajectory Visibility in a Simple Polygon.). Consider two moving entities q and r, their corresponding trajectories τq and τr as a set of line segments (in contrast to Problem 1) connected to one another from their endpoints, and a simple polygon P.
+Assuming the trajectories cannot intersect the edges of P, find every time interval like [ti, tj ] ∈ Tq,r    s.t.        j > i & i, j ∈ N and for all constant values vq(t) = C0 and vr(t) = C1,
+if there is a sub-trajectory τ′′q ⊂ τq & τ′′q ∈ P that q passes through τ′′q during [ti, tj ] s.t. vq(t) = C0, while there is another sub-trajectory in τr that is visible from τ′′q, called 
+τ′′r ⊂ τr & τ′′r ∈ P, s.t. r moves on τ′′r exactly during [ti, tj ] and vr(t) = C1."
+
+This definition is difficult to parse, hence I redefine it in the previous terms and restrict it to when the two trajectories are a single segment, for better comparison with [18]: 
+
+Given are two entities q, r that each traverse a segment trajectory Q and R.
+Denote by Q'' ⊂ Q and R'' ⊂ R the unique subsegments of Q and R, such that Q'' and R'' are visible. 
+For all constant velocities of q and r, we can decide if there is a time interval [ti, tj] such that q and r are in Q'' and R''. 
+
+It is not entirely clear from the writeup what the authors mean with: Q'' and R'' are visible, but they do write at line 133: "Moreover, by visibility, we specifically mean weak visibility."
+What their algorithm does however, is clear since they use the Visibility Glasses from [18, 24].
+They identify subsegments Q'' ⊂ Q and R'' ⊂ R, such that for every x ∈ Q'', there exists y ∈ R'', such that (x, y) are two visible points in P (and, vice versa). 
+This is indeed called weak visibility. 
+Problem 2, is subsequently not equivalent to Trajectory Visibility: 
+they find a time t, where Q[t] ∈ Q'',  and R[t] ∈ R''. This does not imply that Q[t] and R[t] are visible points. Only that there exists a y \in R'' that can see Q[t] (y does not have to be the location of R[t]).
+Hence, the boolean (or time interval) that the authors output, is independent of whether or not the entities q and r see each other at some point in time.
+
+The authors were also made aware of this issue in reviews received after submitting the same paper to previous conferences.
+
+
+----------------------- REVIEW 2 ---------------------
+SUBMISSION: 444
+TITLE: Trajectory Range Visibility
+AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
+
+----------- Overall evaluation -----------
+This is not a review, but just a continuation of e-mail communication that I had with the authors. In particular, the score associated with this "review" should be ignored.
+
+In that e-mail communication asked the following question:
+
+The trajectory visibility problem asks whether there is a time t such that Q(t) and R(t) see each other. You introduce the trajectory range visibility problem. What the reviewer claims (as far as I understand) is that there might be two trajectories Q and R, such that the answer to the trajectory visibility problem is “no” (that is, there is no time t in which Q(t) and R(t) see each other), but nevertheless, the answer to the trajectory range visibility problem is two nonempty sub-trajectories Q” and R”. Please simply say whether this is true (the reviewer is right) or false (the reviewer is wrong).
+
+For this I received a very clear reply:
+
+False (the reviewer is wrong).
+
+However, the reply was then followed by an explanation:
+
+The trajectory visibility problem is kind of a simple decision version of the trajectory range visibility problem. That is, if the answer to the decision problem is yes, then the question is what sub-trajectories make the entities q and r visible to each other. The trajectory range visibility problem considers two constant velocities for q and r. So, while q and r are moving along their trajectories, what are the sub-trajectories that these entities are visible to each other?
+
+This explanation makes me think that the authors did not understand my question. The explanation says what happens if the answer to the decision problem is "yes". However, I asked what happened if the answer to the decision problem is "no". So just to make sure that there is no misunderstanding, let me repeat the question.
+
+Could there be two trajectories Q and R, such that the answer to the trajectory visibility problem is “no” (that is, there is no time t in which Q(t) and R(t) see each other), but nevertheless, the answer to the trajectory range visibility problem is two nonempty sub-trajectories Q” and R”?
+
+Let me add to this the following complimentary question:
+
+Could there be two trajectories Q and R, such that the answer to the trajectory visibility problem is “yes” (that is, there is a time t in which Q(t) and R(t) see each other), but nevertheless, the answer to the trajectory range visibility problem is negative (there are no two nonempty sub-trajectories Q” and R” that serve as an answer)?
+
+Please answer the above two questions.
+
+
+----------------------- REVIEW 3 ---------------------
+SUBMISSION: 444
+TITLE: Trajectory Range Visibility
+AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
+
+----------- Overall evaluation -----------
+The submission claims to solve the following problem:
+
+Given a simple n-vertex polygon P,  preprocess it in  O(n) time and space to answer following queries: given two piecewise-linear trajectories s and t inside P, consisting of m vertices total, determine whether there occurs `visibility' between two entities traversing s and t respectively with constant speeds (predefined or not predefined). 
+
+The submission explicitly refers to the work by Eades et al [18], that shows how to preprocess a simple polygon in near-linear time and space, such that given two query line segments s and t, it can be  determined in \tilde{O}(n^{3/4}) time whether two entities traversing s and t are mutually visible at some time moment. I.e.: whether there exists a time during the traversal such that the line segment between the entity on s and the entity on t is not intersected by polygon P. 
+The authors claim that they extend this work from merely the decision variant, reporting `all pairs of subtrajectories visible to one another'.
+
+
+Although the topic is valid and interesting for computational geometry and genenral algorithms community, there are concerns towards correctness and presentation of the paper. I cannot recommend publishing the paper in any venue before these concerns are eliminated. 
+
+In general, the algorithms explained vaguely and not in a self-contained manner (e g proof of Lemma 2 and Section 5.1.1), tools used such as “endpoint tree” and Graham scan are not summarised. Especially endpoint tree is not at all a common structure.  
+Introduction does not help as well, as it is quite obscure and also misleading. 
+
+I believe the paper needs a major revision before its merits can be judged properly and before it can be considered for publication anywhere. 
+
+
+—— Correctness comments —— 
+
+The central result claimed in this submission is an extension of [18] from decision version to reporting all pairs of mutually visible sub-trajectories. 
+However, this is not what is in fact done in the paper. 
+
+
+
+Let me clarify what I believe authors already know. This is the commonly used terminology and authors should follow it or make strong point why they don’t, but in any case these definitions must be mentioned in the paper. 
+
+- Two points  x and  y inside  P are called visible, if the line segment between x and y does not intersect P.
+
+- Two segments  s and  t inside P are weakly visible if for every point x in s there exists some point y in t such that points x and y are visible. 
+
+- Two segments s and t inside P are strongly visible if for every point x  in s and for every point y in t, the points x and y are visible.
+ 
+Now consider two entities e_s, e_t traversing segments s and t respectively with some speeds. I.e. at time k, entity e_s is at position s(k). Then e_s and e_t are called mutually visible during their traversal if there exists a time k* where s(k*) and t(k*) are two visible points in $P$. 
+
+In [24], it is shown how to compute from s and t, the subsegments s' and t' which are weakly visible. 
+However, it does not suffice to compute a time k where s(k) \in s' and t(k) \in t': weak visibility guarantees that there exists SOME point y \in t' that is visible to s(k). it does not guarantee that this point is also t(k).
+
+In [18], it is shown how to, for two segments s, t and the entities e_s and e_t traversing them at some fixed speed, determine whether e_s and e_t are mutually visible at some time moment .
+The authors seem to claim that they can for two trajectories s, t answer the same question in O(\log n) time as opposed to $\tilde{O}(n^{3/4})$ time.  Moreover, they claim that they report all time intervals at which e_s and e_t become mutually visible. 
+ 
+BUT instead of the above, they do the following: 
+For a given s, t, they compute the (non-degenerate) subsegments s", t" which are strongly visible, and then determine if there is a time $k*$ s.t. s(k*) in s" and t(k*) in t". If there is such k*, then the two entities were mutually visible.
+However, it may happen that the entities are never simultaneously in strongly visible subsegments, but still visible at some time k**. 
+
+The result of the authors hence is not an answer to an interesting algorithmic question.
+Rather, they sometimes determine whether there exists visibility between two entities, and sometimes (arbitrarily) report a false negative. 
+
+
+Another correctness concern is the proof of Lemma 2. It is very obscure and impossible to verify in its current form. Why convex hull of points of the trajectories helps here? Or you mean geodesic convex hull - but in that case it is unclear how exactly is it computed?   Which “Lemma above” do you refer to? How does CV find that the visibility is blocked? (Line 249)
+
+———— Other (also important) comments ——— 
+
+Thm 5:  I did not find Definition 2 in the paper. 
+
+Lemma 3. What do you mean by error rate? How does this result connected with the parameter L fits in the general line of the paper? 
+
+
+L 343 What are “participants”?
+
+
+----------------------- REVIEW 4 ---------------------
+SUBMISSION: 444
+TITLE: Trajectory Range Visibility
+AUTHORS: Arash Vaezi, Seyed Mohammad Hussein Kazemi, Mohammad Ali Abam and Mohammad Ghodsi
+
+----------- Overall evaluation -----------
+To my understanding, the authors aim to solve the problem of reporting visibility intervals between two moving entities in a simple polygon, so the intervals of time when the moving entities see each other; visibility is blocked by the edges of the polygon. More specifically, they consider the following problems:
+1. The input consists of a simple polygon P and two line segments inside P, so that two entities q and r move along the two segments with given constant speeds. Find all the time intervals when q and r can see each other, that is, when a line segment connecting their current locations lies inside P. The coordinates in this problem are integers.
+2. Same as 1, but with arbitrary coordinates and polylines rather than line segments; and aiming to find a mapping between speeds and time intervals, rather than considering speeds as part of the input.
+
+The problem is interesting, but the presentation makes it difficult to properly understand the contribution. I have reviewed a previous version of this paper, and the authors have clarified some points that I found confusing at the time. However, it is still difficult to figure out exactly what problems are being treated. The authors introduce quite a few assumptions throughout the paper, and it is not very clear which ones apply at any given time, or what type of visibility is being considered. Two running times in Lemma 2 are a bit odd, considering it describes a single algorithm. Lemma 3 mentions an algorithm, but seems to describe a data structure, judging by the set of running times. At any time, it is not clear what is preprocessed, and what is part of a query. In line with the work by Eades at al. [1], I would expect that the polygon is preprocessed, but the two trajectories are given at query time. This seems not to be the case, making this work incomparable with that
+ by Eades et al., rather than truly extending it.
+
+While I understand most components on their own, I am still not sure what problem exactly is being solved, so I cannot confidently judge correctness at this point. In my opinion, presentation needs to be further improved to be considered at a conference like ICALP.
+
+In the rest of the review, I elaborate further on the parts I found to be especially confusing. (I have not looked at the appendices in detail.)
+
+While presenting Problem 1, the authors claim that with each time interval, they return the two subsegments that contain the entities’ positions during this time; and that all pairs of points on these segments see each other. This yields a different problem to what I summarised above: if the two segments follow each other around a corner of a polygon, two moving entities may see each other at all times; but clearly not all pairs of points on their paths see each other. On the other hand, the authors also say that they use weak visibility, and I am not sure what this means in the setting of moving points. If instead they consider the weak visibility of the paths of the entities, disregarding the time, that is a different problem yet again. Figure 1 is not helpful in resolving this conclusively, because there the trajectories lie inside a convex polygon. Observation 1 and Figure 2 seem to not consider moving entities or their speeds; rather, they capture visibility, or lack t
+hereof, for all pairs of points on two line segments. The authors claim this solves Problem 2; but it is not immediately clear how the diagram corresponds to some mapping between speeds and time intervals when the entities see each other.
+
+Proof of Lemma 2 is a bit short, so I am not sure how the algorithm actually works. The authors first need to actually compute V_{q, r}—but I am not sure when this happens, or what the ray shooting queries are needed for exactly, since V_{q, r} completely describes visibility between all pairs of points on two line segments. The description before Lemma 3 does not indicate any intuition for what components are needed for Lemma 3. In Lemma 3 itself, along with the two trajectories, we have some query segment—I have no idea what it represents. In Section 5, the authors seem to first find pairs of subtrajectories that are weakly visible; then find some speed ranges, as in Definition 4; but the definition actually does not mention any relationship between the speeds and the subtrajectories. Overall, I still found the paper difficult to understand.
+
+Some detailed comments are below, hoping they can help improve the presentation.
+25–45: If you aim to cover all directions of work involving trajectories, you provide way too few. If you aim to show work that is more closely related to yours, you do not seem to explain the relevance of the cited work to yours.
+101: I would expect this to be a sequence rather than a set, where consecutive points in the sequence are connected with line segments. Otherwise this sounds like a set of line segments connecting some points.
+Table 1: What are n and m?
+134: A weak visibility polygon for a line segment is usually defined as the union of visibility polygons from all the points of the segment; so it represents the points visible from somewhere on the segment. Two line segments are weakly visible to each other iff there is at least one pair of points on them see each other. Is this what you mean? If so, I do not really see connection to moving points: at any time t, you would check visibility between two points (current locations), not line segments.
+144: If all pairs of points on the subtrajectories see each other, this is neither the moving point problem nor weak visibility.
+190: How do you parametrise the polylines? If the same as for the Fréchet distance: do you discard the speeds of the entities?
+Figure 1: This would be more helpful if the trajectories were not in a convex polygon, so that some parts of the diagram would be blocked.
+Figures 1, 2: What exactly are your axes? Are they lengths along the polylines?
+216–218: This is an odd way to define a convex chain as an output of an algorithm rather than by its geometric properties.
+General: This is a stylistic choice, but consider not using citation markers as parts of speech in your sentences (Referring to [24] → Referring to work by Guibas and Hershberger [24]).
+General: Again a stylstic choice, but consider using \emph instead of underlining.
+Lemma 2: It is unusual to see preprocessing in an algorithm description, rather than when describing a data structure. This sounds like you are describing an O(n + m log n)-time algorithm.
+Lemma 2: So whether all pairs of points see each other, right? Not sure why you define it via all subtrajectories.
+245: Usually referred to as Graham scan.
+246: So vertices or endpoints? For a polyline on the sequence <p_1, p_2, …, p_m> I would call all of these vertices; but only p_1 and p_m endpoints.
+248: Is this dynamic? Why would the vertices change?
+249: What is CV?
+Lemma 3: What is ε? Is it user-defined?
+292: on → in
+304: But the speed is relevant to what you report, isn’t it?
+330: How are they ordered?
+346–348: This should probably be mentioned somewhere in the introduction, with a precise definition of ‘meet’. It is confusing for the reader to have to look through half of the paper to understand what is being computed.
+Refs 6 and 9 have been published at conferences: 10.4230/LIPIcs.SoCG.2017.20 and 10.4230/LIPIcs.ISAAC.2022.58
+Ref 26: Please indicate which university the thesis is published by, and provide a URL.
+
+[1] P. Eades, I. van der Hoog, M. Löffler, F. Staals. Trajectory Visibility. In Proc. 17th Scandinavian Symposium and Workshops on Algorithm Theory (SWAT), 2020, pp. 23:1--23:22. doi: 10.4230/LIPIcs.SWAT.2020.23
